@@ -9,7 +9,7 @@ const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 const likeRoutes = require('./routes/like');
 
-mongoose.connect('mongodb+srv://Shirow:Outsider27@cluster0.pjf1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
