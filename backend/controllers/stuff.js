@@ -28,8 +28,7 @@ exports.modifyThing = (req, res, next) => {
   Thing.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
     .then(() => res.status(201).json({ message: 'Thing updated successfully!' })
     )
-    .catch((error) => {
-      res.status(400).json({ error: error })
+    .catch(error => { res.status(400).json({ error: error })
     });
 };
 
