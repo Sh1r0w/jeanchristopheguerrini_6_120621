@@ -2,10 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const path = require('path');
+const helmet = require('helmet');
 
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
+const likeRoutes = require('./routes/like');
 
 mongoose.connect('mongodb+srv://Shirow:Outsider27@cluster0.pjf1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -14,8 +16,7 @@ mongoose.connect('mongodb+srv://Shirow:Outsider27@cluster0.pjf1h.mongodb.net/myF
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
-
-app.use(cors());
+app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,5 +29,8 @@ app.use(bodyParser.json());
 
 app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(cors());
+app.use('/api/sauces', likeRoutes);
 
 module.exports = app;
