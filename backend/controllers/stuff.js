@@ -5,7 +5,11 @@ exports.createThing = (req, res, next) => {
   const thingObject = JSON.parse(req.body.sauce);
   const thing = new Thing({
     ...thingObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [],
+    usersDisliked: []
   });
   thing.save()
     .then(() => res.status(201).json({ message: 'Sauce Enregistré !' }))

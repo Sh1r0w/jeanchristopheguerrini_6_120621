@@ -1,36 +1,28 @@
 const Thing = require('../models/Thing');
 
 exports.newLike = (req, res, next) => {
-    const like = req.body.likes;
-    const dislikes = req.body.dislikes;
+    let likes = req.body.like;
+    const user = req.body.userId;
+    const userLiked = req.params.usersLiked
 
-    Thing.updateOne({ _id: req.params.id })
-        .then(sauce => {
-           if(userId !== req.params.userLiked){
-               const thing = req.file ?{ 
-                ...JSON.parse(req.body.sauce),
-                likes: like,
-                userLiked: userId
-            } : { ...req.body};
-            Thing.updateOne({ _id: req.params.id }, { ...thing, _id: req.params.id })
-                .then(() => res.status(201).json({ message: 'Thing updated successfully!' })
-                )
-                .catch(error => { res.status(400).json({ error: error })
-                });
-
-            } else if(userId !== req.params.userDisliked){
-                
-                    const things = req.file ? {
-                        ...JSON.parse(req.body.sauce),
-                        dislikes: dislikes,
-                        userDisliked: userId,
-                    } : { ...req.body};
-                    Thing.updateOne({ _id: req.params.id }, { ...things, _id: req.params.id })
-                .then(() => res.status(201).json({ message: 'Thing updated successfully!' })
-                )
-                .catch(error => res.status(400).json({ error: error }));
-                
-            }
-        })
-        .catch(error => res.status(201).json({ error: error }))
+    if(likes === 1 && !userLiked.find(usersLiked => usersLiked = user)){
+  Thing.updateOne({ _id: req.params.id }, { $push:{usersLiked: user}, $inc: {likes: 1}})
+    .then(() => res.status(201).json({ message: 'Like updated successfully!' })
+    )
+    .catch(error => { res.status(400).json({ error: error })
+    });
+    console.log(user)
+}else if (likes === -1){
+    Thing.updateOne({ _id: req.params.id }, { $push:{usersDisliked: user}, $inc: {dislikes: 1}})
+    .then(() => res.status(201).json({ message: 'Dislike updated successfully!' })
+    )
+    .catch(error => { res.status(400).json({ error: error })
+    });
+} else {
+    Thing.updateOne({ _id: req.params.id }, { $pull:{usersDisliked: user}, $pull: {usersLiked: user}, $inc: {dislikes: 1}})
+    .then(() => res.status(201).json({ message: 'Reset Like successfully!' })
+    )
+    .catch(error => { res.status(400).json({ error: error })
+    });
+}
 };
