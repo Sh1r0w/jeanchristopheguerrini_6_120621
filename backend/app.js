@@ -8,7 +8,8 @@ const helmet = require('helmet');
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+//Connection à la bdd mongo
+mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.mongodb.net/pekocko?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -17,6 +18,7 @@ mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.m
 const app = express();
 app.use(helmet());
 
+//Mise au norme des Headers pour accepté les requétes
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+//Routes global
 app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
