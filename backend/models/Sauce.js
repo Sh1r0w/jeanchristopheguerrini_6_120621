@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 //Création d'un Schéma pour les sauces sur Mongo
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true},
@@ -15,5 +14,6 @@ const sauceSchema = mongoose.Schema({
     usersLiked: {type: [String]},
     usersDisliked: {type: [String]}
 });
+
 
 module.exports = mongoose.model('Sauce', sauceSchema);
