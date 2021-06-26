@@ -1,9 +1,17 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
+const validator = require('validator');
+
+
+
 
 // Création d'une sauce
 exports.createSauce = (req, res, next) => {
-  const sauceObject = JSON.parse(req.body.sauce);
+
+  //suppresion de caractére spécifique
+  const sauceObject = JSON.parse(validator.blacklist(req.body.sauce, '+=$`{}'));
+  
+  console.log ()
   const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -28,7 +36,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ?
     {
-      ...JSON.parse(req.body.sauce),
+      ...JSON.parse(validator.blacklist(req.body.sauce, '+=$`{}')),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 
     } : { ...req.body };
