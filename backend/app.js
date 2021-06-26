@@ -20,6 +20,8 @@ mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.m
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+
+// securisation de l'api
 app.use(function(req, res, next) {
   if (toobusy()) {
       res.send(503, "Server Too Busy");
