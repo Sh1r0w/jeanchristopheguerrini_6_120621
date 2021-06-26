@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const toobusy = require('toobusy-js');
 
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
+
+
 
 //Connection à la bdd mongo
 mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.mongodb.net/pekocko?retryWrites=true&w=majority',
@@ -16,7 +20,15 @@ mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.m
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+app.use(function(req, res, next) {
+  if (toobusy()) {
+      res.send(503, "Server Too Busy");
+  } else {
+  next();
+  }
+});
 app.use(helmet());
+app.use(mongoSanitize({replaceWith: '_',}));
 
 //Mise au norme des Headers pour accepté les requétes
 app.use((req, res, next) => {
@@ -29,6 +41,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 //Routes global
+
 app.use('/api/sauces', stuffRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));

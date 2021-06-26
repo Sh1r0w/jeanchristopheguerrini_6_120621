@@ -1,25 +1,48 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const User = require('../models/User');
+const CryptoJS = require("crypto-js");
+const passwordValidator = require('password-validator');
+
+//Mot de passe renforcer min 5 lettres max 100 1 majuscule 1 minuscule et 1 chiffre sans espace
+const schema = new passwordValidator();
+
+schema
+.is().min(5)
+.is().max(100)
+.has().uppercase()
+.has().lowercase()
+.has().digits(1)
+.has().not().spaces();
+
+
 
 //Création d'un utilisateur
 exports.signup = (req, res, next) => {
+  
+  const mail = CryptoJS.HmacSHA256(req.body.email,'52648597').toString();
+  console.log(schema.validate(req.body.password))
     bcrypt.hash(req.body.password, 10)
-      .then(hash => {
+      .then(hash => { if(schema.validate(req.body.password) == true){
         const user = new User({
-          email: req.body.email,
+          email: mail,
           password: hash
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
           .catch(error => res.status(400).json({ error }));
-      })
+      } else {
+        console.log("Votre Mot de passe n'ai pas valide")
+        next();
+      }
+    })
       .catch(error => res.status(500).json({ error }));
   };
 
   //Connection d'un utilisateur
   exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    const mail = CryptoJS.HmacSHA256(req.body.email,'52648597').toString();
+    User.findOne({ email: mail })
       .then(user => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
