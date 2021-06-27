@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
 const toobusy = require('toobusy-js');
 
 const stuffRoutes = require('./routes/stuff');
@@ -30,7 +29,6 @@ app.use(function(req, res, next) {
   }
 });
 app.use(helmet());
-app.use(mongoSanitize({replaceWith: '_',}));
 
 //Mise au norme des Headers pour accepté les requétes
 app.use((req, res, next) => {

@@ -9,9 +9,8 @@ const validator = require('validator');
 exports.createSauce = (req, res, next) => {
 
   //suppresion de caractére spécifique
-  const sauceObject = JSON.parse(validator.blacklist(req.body.sauce, '+=$`{}'));
-  
-  console.log ()
+  const sauceObject = JSON.parse(validator.blacklist(req.body.sauce, '+=$`'));
+console.log(sauceObject)
   const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
@@ -36,7 +35,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ?
     {
-      ...JSON.parse(validator.blacklist(req.body.sauce, '+=$`{}')),
+      ...JSON.parse(validator.blacklist(req.body.sauce, '+=$`')),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 
     } : { ...req.body };
