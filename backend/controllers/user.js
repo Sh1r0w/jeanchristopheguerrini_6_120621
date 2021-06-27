@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User');
 const CryptoJS = require("crypto-js");
 const passwordValidator = require('password-validator');
+const validator = require('validator');
 
 //Mot de passe renforcer min 5 lettres max 100 1 majuscule 1 minuscule et 1 chiffre sans espace
 const schema = new passwordValidator();
@@ -21,9 +22,8 @@ schema
 exports.signup = (req, res, next) => {
   
   const mail = CryptoJS.HmacSHA256(req.body.email,'52648597').toString();
-  console.log(schema.validate(req.body.password))
     bcrypt.hash(req.body.password, 10)
-      .then(hash => { if(schema.validate(req.body.password) == true){
+      .then(hash => { if(schema.validate(req.body.password) == true && validator.isEmail(req.body.email) == true){
         const user = new User({
           email: mail,
           password: hash
