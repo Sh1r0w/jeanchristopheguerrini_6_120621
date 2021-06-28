@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const toobusy = require('toobusy-js');
+require('dotenv').config();
 
 const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
@@ -12,20 +13,22 @@ const userRoutes = require('./routes/user');
 
 
 //Connection à la bdd mongo
-mongoose.connect('mongodb+srv://administrateur:CN7lVJhrkdiB5xdy@cluster0.pjf1h.mongodb.net/pekocko?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://' + process.env.USER + ':' + process.env.PASS + process.env.DB,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
 
 // securisation de l'api
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   if (toobusy()) {
-      res.send(503, "Server Too Busy");
+    res.send(503, "Server Too Busy");
   } else {
-  next();
+    next();
   }
 });
 app.use(helmet());

@@ -42,7 +42,8 @@ exports.modifySauce = (req, res, next) => {
   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
     .then(() => res.status(201).json({ message: 'Sauce updated successfully!' })
     )
-    .catch(error => { res.status(400).json({ error: error })
+    .catch(error => {
+      res.status(400).json({ error: error })
     });
 };
 
