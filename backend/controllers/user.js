@@ -34,6 +34,7 @@ exports.signup = (req, res, next) => {
           .catch(error => res.status(400).json({ error }));
       } else {
         console.log("Votre Mot de passe n'est pas valide")
+        next();
       }
     })
     .catch(error => res.status(500).json({ error }));
