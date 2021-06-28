@@ -10,7 +10,6 @@ exports.createSauce = (req, res, next) => {
 
   //suppresion de caractére spécifique
   const sauceObject = JSON.parse(validator.blacklist(req.body.sauce, '+=$`'));
-console.log(sauceObject)
   const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
